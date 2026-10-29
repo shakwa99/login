@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - لوحة التحكم</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-family/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Cairo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-900 min-h-screen flex items-center justify-center p-4">
+
+    <!-- Container -->
+    <div class="w-full max-w-md">
+        
+        <!-- Login Form Card -->
+        <div id="loginCard" class="glass-card rounded-2xl shadow-2xl p-8 border border-white/20 transition-all duration-300">
+            
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 mb-4 shadow-inner">
+                    <i class="fa-solid fa-user-shield text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">تسجيل الدخول</h2>
+                <p class="text-sm text-gray-500 mt-1">أدخل بيانات الحساب للوصول للنظام</p>
+            </div>
+
+            <!-- Error Alert Box -->
+            <div id="alertBox" class="hidden mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm flex items-center gap-3">
+                <i class="fa-solid fa-triangle-exclamation text-lg flex-shrink-0"></i>
+                <span id="alertMessage">اسم المستخدم أو كلمة المرور غير صحيحة!</span>
+            </div>
+
+            <!-- Form -->
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5" novalidate>
+                
+                <!-- Username Input -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2" for="username">اسم المستخدم</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-gray-400">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" id="username" placeholder="أدخل اسم المستخدم" 
+                            class="w-full pr-10 pl-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none text-gray-800 bg-gray-50/50" required>
+                    </div>
+                </div>
+
+                <!-- Password Input -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2" for="password">كلمة المرور</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-gray-400">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" id="password" placeholder="••••••••" 
+                            class="w-full pr-10 pl-12 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none text-gray-800 bg-gray-50/50" required>
+                        <!-- Toggle Password Button -->
+                        <button type="button" onclick="togglePassword()" class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400 hover:text-indigo-600 transition-colors">
+                            <i id="toggleIcon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember & Hint -->
+                <div class="flex items-center justify-between text-sm">
+                    <label class="flex items-center text-gray-600 cursor-pointer">
+                        <input type="checkbox" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 ml-2">
+                        تذكرني
+                    </label>
+                    <span class="text-xs text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full font-medium">تجربة: admin / 1010</span>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submitBtn" 
+                    class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-indigo-500/30 active:scale-[0.98] flex justify-center items-center gap-2">
+                    <span>دخول</span>
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Success Dashboard Screen (Hidden by default) -->
+        <div id="successCard" class="hidden glass-card rounded-2xl shadow-2xl p-8 border border-white/20 text-center space-y-6">
+            <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto shadow-inner">
+                <i class="fa-solid fa-circle-check text-4xl"></i>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-1">تم تسجيل الدخول بنجاح!</h2>
+                <p class="text-gray-600">أهلاً بك <span id="welcomeUser" class="font-bold text-indigo-600">admin</span>، جاري توجيهك للوحة التحكم...</p>
+            </div>
+            
+            <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-100 text-right space-y-2">
+                <div class="text-xs text-indigo-500 font-semibold uppercase tracking-wider">صلاحيات الحساب</div>
+                <div class="flex items-center gap-2 text-indigo-900 font-bold">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>مدير النظام (Administrator)</span>
+                </div>
+            </div>
+
+            <button onclick="logout()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl transition-colors">
+                تسجيل الخروج
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Script -->
+    <script>
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Login Validation Logic
+        function handleLogin(e) {
+            e.preventDefault();
+
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const alertBox = document.getElementById('alertBox');
+            const alertMessage = document.getElementById('alertMessage');
+            const loginCard = document.getElementById('loginCard');
+            const successCard = document.getElementById('successCard');
+
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            // Clear previous animation
+            loginCard.classList.remove('animate-shake');
+
+            // Check Empty
+            if (!username || !password) {
+                alertMessage.textContent = 'يرجى إدخال اسم المستخدم وكلمة المرور!';
+                alertBox.classList.remove('hidden');
+                setTimeout(() => loginCard.classList.add('animate-shake'), 10);
+                return;
+            }
+
+            // Check Credentials
+            if (username === 'admin' && password === '1010') {
+                // Success
+                alertBox.classList.add('hidden');
+                document.getElementById('welcomeUser').textContent = username;
+                
+                // Animate transition
+                loginCard.classList.add('hidden');
+                successCard.classList.remove('hidden');
+            } else {
+                // Failure
+                alertMessage.textContent = 'اسم المستخدم أو كلمة المرور غير صحيحة!';
+                alertBox.classList.remove('hidden');
+                setTimeout(() => loginCard.classList.add('animate-shake'), 10);
+            }
+        }
+
+        // Logout Reset
+        function logout() {
+            document.getElementById('loginForm').reset();
+            document.getElementById('loginCard').classList.remove('hidden');
+            document.getElementById('successCard').classList.add('hidden');
+            document.getElementById('alertBox').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
